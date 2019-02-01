@@ -1,0 +1,123 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>科普活动报道</title>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/show/style.css"/>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/show/slide.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<!--  Header  -->
+    <%@include file="../header.jsp" %>
+    <!--  图片列表  -->
+    <div id="pic_con">
+    	<div class="showlocal">
+        	<span>您现在的位置：</span><span><a href="${pageContext.request.contextPath }/show/index.action">首页</a></span><span>&nbsp;>&nbsp;<a href="${pageContext.request.contextPath }/show/activity/showList.action">科普活动报道</a></span>
+            <hr>
+        </div>
+        <!--  图片  -->
+        <div class="showpic" id="showpic">
+        	<ul>
+        		<c:forEach items="${pageBean.beanList}" var="activity">
+					<li>
+						<a href="${pageContext.request.contextPath }/show/articleInfo.action?nid=${activity.nid}"><img src="${activity.image_b }" />
+							<span>${activity.title}</span>
+						</a>
+        			</li>
+        		</c:forEach>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!--  页码  -->
+    <div class="page">
+        <c:choose>
+					<c:when test="${pageBean.pageNum<=1 }">
+						<a class="page_turn" href="#">上一页</a>
+					</c:when>
+					<c:otherwise>
+						<a class="page_turn" href="${pageContext.request.contextPath }/show/showList.action?pageNum=${pageBean.pageNum-1}">上一页</a>
+					</c:otherwise>
+				</c:choose>
+
+				<c:choose>
+					<c:when test="${pageBean.pageTotal <=6 }">
+						<c:set var="begin" value="1" property="request" />
+						<c:set var="end" value="${pageBean.pageTotal  }" />
+					</c:when>
+					<c:otherwise>
+						<c:set var="begin" value="${pageBean.pageNum }" property="requset" />
+						<c:set var="end" value="${pageBean.pageNum+4 }" property="request" />
+
+						<c:if test="${end>=pageBean.total }">
+							<c:set var="begin" value="${pageBean.pageTotal -4}"
+								property="requset" />
+							<c:set var="end" value="${pageBean.pageTotal  }"
+								property="request" />
+						</c:if>
+					</c:otherwise>
+				</c:choose>
+
+				<c:forEach begin="${begin}" end="${end}" var="i">
+					<c:choose>
+						<c:when test="${i==pageBean.pageNum }">
+							<a class="on" href="#">${i }</a>
+						</c:when>
+						<c:otherwise>
+						 <a href="${pageContext.request.contextPath }/show/showList.action?pageNum=${i}">${i }</a>
+						</c:otherwise>
+					</c:choose>
+
+				</c:forEach>
+				 <c:if test="${end < pageBean.pageTotal-1 }">
+				    ...
+				 </c:if>
+				 <c:if test="${pageBean.pageTotal>6 }">
+				   <a href="${pageContext.request.contextPath }/show/showList.action?pageNum=${pageBean.pageTotal}">${pageBean.pageTotal}</a>
+				 </c:if> 
+				
+				<c:choose>
+					<c:when test="${pageBean.pageNum>=pageBean.pageTotal }">
+						<a class="page_turn" href="#"> 下一页</a>
+					</c:when>
+					<c:otherwise>
+						<a class="page_turn" href="${pageContext.request.contextPath }/show/showList.action?pageNum=${pageBean.pageNum+1}">下一页</a>
+					</c:otherwise>
+				</c:choose>
+            	跳转到：
+            <input id="page_text" type="text" name="page_text"/>
+            <a id="page_btn" class="page_turn" href="javascript:;" onclick="go()">GO</a>
+      </div>
+        
+    <!--  Footer  -->
+    <div id="footer">
+    	Copyright&copy;2016 信息素质教育在线学习平台 All Right Reserved<br/>
+        技术支持：计算机网络中心&nbsp;&nbsp;
+        <a href="${pageContext.request.contextPath }/user/tologin.action">>>后台登陆</a>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+	function go(){
+		var pageNum =parseInt($("#page_text").val());//获取文本框中的当前页码
+		var pageTotal = parseInt("${pageBean.pageTotal }");
+		//正则校验
+		if(!/^[1-9]\d*$/.test(pageNum)) {//对当前页码进行整数校验
+			alert('请输入正确的页码！');
+			return;
+		}
+		if(pageNum > pageTotal) {//判断当前页码是否大于最大页
+			
+			alert('数字太大！请输入正确的页码！');		//
+			return;
+		}
+		location = "${pageContext.request.contextPath }/show/showList.action?pageNum="+pageNum;
+	
+	}
+</script>
+</html>

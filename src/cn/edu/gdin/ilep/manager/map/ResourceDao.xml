@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.gdin.ilep.manager.dao.ResourceDao">
+	<resultMap  id="baseMap" type="cn.edu.gdin.ilep.manager.domain.Resources">
+		<id column="sid" property="sid"/>
+		<result column="title" property="title"/>
+		<result column="path" property="path"/>
+		<result column="publish_time" property="publish_time"/>
+		<result column="order_by" property="orderBy"/>
+		<result column="uname" property="uname"/>
+		<association property="category" column="cid" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="cid" property="cid"/>
+			<result column="cname" property="cname"/>
+		</association>
+	</resultMap>
+	
+	<resultMap  id="showMap" type="cn.edu.gdin.ilep.manager.domain.Resources">
+		<id column="sid" property="sid"/>
+		<result column="title" property="title"/>
+		
+		<result column="publish_time" property="publish_time"/>
+		<result column="order_by" property="orderBy"/>
+		<result column="uname" property="uname"/>
+		<association property="category" column="cid" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="cid" property="cid"/>
+			<result column="cname" property="cname"/>
+		</association>
+	</resultMap>
+	
+	
+	<insert id="insertResource" parameterType="cn.edu.gdin.ilep.manager.domain.Resources">
+		<!-- <selectKey keyColumn="sid" keyProperty="sid" resultType="string" order="BEFORE">
+			select  replace(uuid(),'-','')   from dual
+		</selectKey>
+		 -->
+		insert into resource(sid,title,path,publish_time,cid,uname) 
+		values(#{sid},#{title},#{path},#{publish_time},#{category.cid},#{uname})
+		
+	</insert>
+	
+	<select id="selectAllResource" parameterType="cn.edu.gdin.ilep.page.PageBean" resultMap="baseMap">
+		SELECT r.sid,r.path,r.title,r.publish_time,r.order_by,c.cid,c.cname 
+		FROM resource r,category c
+		where r.cid=c.cid
+		ORDER BY r.order_by DESC
+		 LIMIT #{total},#{pageSize}
+	</select>
+	
+	<select id="selectResourceCount" resultType="int">
+		select count(*) from resource
+	
+	</select>
+	
+	
+	<select id="selectResourceByID" parameterType="string" resultMap="baseMap">
+		select * from resource
+		where sid=#{sid}
+	</select>
+	
+	<select id="selectResourceByTitle" parameterType="string" resultMap="baseMap">
+		select * from resource
+		where title like CONCAT(CONCAT('%',#{title}, '%')
+	</select>
+	
+	<update id="updateResource" parameterType="cn.edu.gdin.ilep.manager.domain.Resources">
+		update resource set 
+		title=#{title},publish_time=#{publish_time},cid=#{category.cid},uname=#{uname}
+		where sid=#{sid}
+	</update>
+	
+	<delete id="deleteResourceByID" parameterType="string">
+		delete from resource where sid=#{sid}
+	
+	</delete>
+	
+	
+	<!-- 前台DAO -->
+	<select id="selectListByCname" parameterType="cn.edu.gdin.ilep.page.ShowPageBean" resultMap="showMap">
+		SELECT r.sid,r.title,r.publish_time,r.order_by,r.uname
+		FROM resource r
+		where r.cid in (select c.cid from category c where c.cname=#{cname})
+		ORDER BY r.order_by DESC
+		 LIMIT #{total},#{pageSize}
+		
+	</select>
+	
+	<select id="selectCountByCname" parameterType="string" resultType="int">
+		SELECT count(*) FROM resource r
+		where r.cid in (select c.cid from category c where c.cname=#{cname})
+	
+	</select>
+	
+	
+	
+	
+	
+	
+	<!-- Lucene Dao -->
+	
+	<select id="selectAll" resultMap="showMap">
+		select * from resource
+	</select>
+	
+</mapper>

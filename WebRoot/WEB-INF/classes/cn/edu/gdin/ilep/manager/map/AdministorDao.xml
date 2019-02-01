@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.gdin.ilep.manager.dao.AdministorDao">
+	
+	<resultMap  id="baseMap" type="cn.edu.gdin.ilep.manager.domain.Administor" >
+		<id column="aid" property="aid"/>
+		<result column="name" property="name"/>
+		<result column="passoword" property="password"/>
+		<result column="phone" property="phone"/>
+		<result column="power" property="power"/>
+	</resultMap>
+
+
+
+	<select id="selectByNameAndPassword" 
+		parameterType="cn.edu.gdin.ilep.manager.domain.Administor" resultMap="baseMap">
+		select * from
+		administor
+		where name=#{name} and password=#{password}
+	</select>
+	
+	<select id="selectByPhone"
+		parameterType="cn.edu.gdin.ilep.manager.domain.Administor"
+		resultMap="baseMap"
+	>
+		select aid,name,power,phone
+		from administor
+		where phone=#{phone} and name=#{name}
+	</select>
+	
+	
+	<select id="selectByID"
+		parameterType="cn.edu.gdin.ilep.manager.domain.Administor"
+		resultMap="baseMap"
+	>
+		select aid,name,power,phone
+		from administor
+		where aid=#{aid}
+	</select>
+	
+	
+	
+	<select id="selectByIDWithPassword" parameterType="cn.edu.gdin.ilep.manager.domain.Administor"
+		resultMap="baseMap"
+	>
+		select aid,password,name,power,phone
+		from administor
+		where aid=#{aid}
+	</select>
+	
+	
+	<select id="selectByName" parameterType="string" resultMap="baseMap">
+		select aid,name,power,phone
+		 from administor
+		where name=#{name}
+	
+	</select>
+	
+	
+	<select id="selectAll" parameterType="cn.edu.gdin.ilep.page.PageBean" resultType="cn.edu.gdin.ilep.manager.domain.Administor">
+		select 
+		aid,name,power,phone 
+		from administor
+		LIMIT #{total},#{pageSize}
+	</select>
+	
+	
+	<select id="selectAdministorCount" resultType="int">
+		select count(*) from administor
+	</select>
+	
+	
+	<insert id="insertAdministor" parameterType="cn.edu.gdin.ilep.manager.domain.Administor">
+        insert into administor (aid, name, password,   
+          power, phone)  
+        values (#{aid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},   
+          #{power,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR})
+  
+	</insert>
+	
+	<!-- 个人-修改密码 -->
+	<update id="updatePassword" parameterType="cn.edu.gdin.ilep.manager.domain.Administor">
+		update administor set 
+		password=#{password}
+		where aid=#{aid} and phone=#{phone}
+	</update>
+	
+	<!-- 超级管理员-修改管理员信息 -->
+	<update id="updateAdministor" parameterType="cn.edu.gdin.ilep.manager.domain.Administor">
+		update administor set 
+		name=#{name},password=#{password},power=#{power},phone=#{phone}
+		where aid=#{aid}
+	
+	</update>
+	<!-- 个人-修改个人信息 -->
+	<update id="updateUser" parameterType="cn.edu.gdin.ilep.manager.domain.Administor">
+		update administor set
+		name=#{name},phone=#{phone}
+		where aid=#{aid}
+	</update>
+	
+	<delete id="deleteAdministor" parameterType="string">
+		delete from administor
+		where aid=#{aid}
+		
+	</delete>
+	
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.gdin.ilep.manager.dao.CategoryDao">
+
+	<resultMap id="baseMap" type="cn.edu.gdin.ilep.manager.domain.Category"  extends="simpleMap">
+		<!--  
+		<id column="cid" property="cid"/>
+		<result column="cname" property="cname"/>
+		<result column="desc" property="desc"/> 
+		<association property="parent" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="pid" property="cid"/>
+		</association>
+		-->
+		
+		
+		<collection property="child" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="ch_cid" property="cid"/>
+			<result column="ch_cname" property="cname"/>
+			<result column="ch_desc" property="desc"/>
+			<result column="ch_isResource" property="isResource"/>
+			<association property="parent" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+				<id column="ch_pid" property="cid"/>
+			</association>
+		
+		</collection>
+		
+	</resultMap>
+	<select id="selectAllCategory" resultMap="baseMap">
+	
+	select t1.*,
+	t2.cid ch_cid,t2.cname ch_cname,t2.pid ch_pid,
+	t2.`desc` ch_desc,t2.isResource ch_isResource 
+	from category t1 LEFT JOIN category t2
+	ON t1.pid is null and t1.cid=t2.pid
+	
+	</select>
+	
+	<resultMap id="simpleMap" type="cn.edu.gdin.ilep.manager.domain.Category" >
+		<id column="cid" property="cid"/>
+		<result column="cname" property="cname"/>
+		<result column="desc" property="desc"/>
+		<result column="isResource" property="isResource"/>
+		<association property="parent" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="pid" property="cid"/>
+		</association>
+	</resultMap>
+	
+	
+	<select id="selectAll" parameterType="cn.edu.gdin.ilep.page.PageBean" resultMap="simpleMap">
+	
+		select * from category limit #{total},#{pageSize}
+	
+	</select>
+	
+	<select id="selectCount" resultType="int">
+		select count(*) from category
+	</select>
+	
+	<select id="selectByCid" parameterType="string" resultMap="simpleMap">
+		select * from category where cid = #{cid}
+	</select>
+	
+	<select id="selectParentCategory" resultMap="simpleMap">
+		select * from category where pid is null;
+	</select>
+	
+	
+	<update id="updateCategory" parameterType="cn.edu.gdin.ilep.manager.domain.Category">
+		update category set cname=#{cname},`desc`=#{desc},pid=#{parent.cid},isResource=#{isResource}
+		where cid=#{cid}
+	
+	</update>
+	
+	<insert id="insertCategory" parameterType="cn.edu.gdin.ilep.manager.domain.Category">
+        
+        <!--<selectKey keyProperty="cid" resultType="String" order="BEFORE">  
+            select  replace(uuid(),'-','')   from dual  
+        </selectKey>  -->
+        
+        insert into category(cid,cname,`desc`,pid,isResource) 
+        values
+        (#{cid},#{cname},#{desc},#{parent.cid},#{isResource})
+        
+	</insert>
+	
+	
+	<delete id="deleteCategory" parameterType="cn.edu.gdin.ilep.manager.domain.Category">
+		delete from category 
+		where
+		cid=#{cid}
+	</delete>
+	
+	<select id="selectByCidWithChild" parameterType="string" resultMap="baseMap">
+		select t1.*,
+		t2.cid ch_cid,t2.cname ch_cname,t2.pid ch_pid, 
+		t2.`desc` ch_desc, t2.isResource ch_isResource
+		from category t1 , category t2
+		where 
+		t1.cid=#{cid} and t1.cid=t2.pid;
+		
+	</select>
+	
+	<select id="selectResourceCategory" resultMap="simpleMap">
+		select * from category
+		where isResource=1;
+	</select>
+	
+	<!-- ajax Dao-->
+	<select id="selectByCname" parameterType="string" resultType="cn.edu.gdin.ilep.manager.domain.Category">
+		select * from category
+		where 
+		cname=#{cname}
+	
+	</select>
+	
+	
+</mapper>

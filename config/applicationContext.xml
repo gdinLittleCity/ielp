@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<!-- 加载properties配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	
+	<!-- 启动自动扫描器 自动注册注解Java类  @controller不注册,在spring-mvc中配置了
+		use-default-filters是否自动扫描@Component、@Repository、@Service和@Controller的类。默认为true
+		设为true可能出现事务失效,原因：重复扫描新的Bean覆盖旧的Bean,使得同一事务的Bean出现在事务外
+	 -->
+	<context:component-scan base-package="cn.edu.gdin.ilep.manager,cn.edu.gdin.ilep.show" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	
+	<!-- 配置c3p0数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${driverClass}"/>
+		<property name="jdbcUrl" value="${jdbcUrl}"/>
+		<property name="user" value="${user}"/>
+		<property name="password" value="${password}"/>
+		<property name="acquireIncrement" value="${acquireIncrement}"/>
+		<property name="initialPoolSize" value="${initialPoolSize}"/>
+		<property name="minPoolSize" value="${minPoolSize}"/>
+		<property name="maxPoolSize" value="${maxPoolSize}"/>
+		<!-- 处理mysql 8小时断开连接问题 46,285,516 -->
+		<property name="testConnectionOnCheckin" value="${testConnectionOnCheckin}"/>
+		<property name="automaticTestTable" value="${automaticTestTable}"/>
+		<property name="idleConnectionTestPeriod" value="${idleConnectionTestPeriod}"/>
+		<property name="maxIdleTime" value="${maxIdleTime}"/>
+		<property name="testConnectionOnCheckout" value="${testConnectionOnCheckout}"/>
+		
+	</bean>
+	
+	<!--  配置sqlsessionfactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">		
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource"/>
+		<property name="mapperLocations"
+			 value="classpath:cn/edu/gdin/ilep/manager/map/*.xml">
+		</property>
+	</bean>
+	<!-- 扫描接口类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.edu.gdin.ilep.manager.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<!-- 声明式事务 注解驱动 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+		
+	<!--  <bean id="categoryService" class="cn.edu.gdin.ilep.manager.service.impl.CategoryServiceImpl"></bean>
+		-->
+</beans>

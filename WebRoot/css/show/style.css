@@ -1,0 +1,143 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+*{ padding:0; margin:0;}
+ul{ list-style:none;}
+li{ color:#333;}
+a{ text-decoration:none; color:#333;}
+img{ vertical-align:middle; border:0;}
+.clear{ clear:both;}
+
+body{ background:url(../../images/show/body_bg.gif) repeat-x; font-family:"宋体"; font-size:12px;}
+#wrap{ width:1025px; margin:0 auto;}
+
+/*----文字内容框（新闻动态、素质信息、友情链接、素质获取&甄别----*/
+.box{ border:1px solid #dddddd; background:url(../../images/show/con_bg.gif) repeat-x;}
+	.title{ width:122px; height:27px; background:url(../../images/show/title_bg.gif) no-repeat; line-height:27px; color:#fff; font-weight:bold; text-indent:38px; float:left; font-size:14px;}
+	 a.more{ width:36px; display:block; float:right; padding:3px 10px 0 0; _padding:6px 10px 0 0; *padding:6px 10px 0 0; padding-top:6px\9;}
+	.con,.con1,.con2{ padding:15px 10px;  overflow:hidden; line-height:26px;}
+		.con li,.con1 li,.con2 li { height: 26px; background:url(../../images/show/icon01.gif) no-repeat 0; text-indent:10px; position:relative;}
+		.con a,.con1 a,.con2 ul{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;}
+		.con a:hover,.con1 a:hover,.con2 a:hover { color: #ff970f; text-decoration: underline;}
+		.con span,.con1 span,.con2 span{ position:absolute; top:0; right:0; color:#999;}
+
+/*----Header----*/
+#header{ background:url(../../images/show/header_bg.gif) no-repeat 557px 0; height:93px; position:relative;}
+	#header img{ padding:20px 0 0 27px;}
+	#header dl{ border:1px solid #dddedc; background:#fff; position:absolute; top:38px; right:10px; height:25px; width:202px; *width:210px;}
+		dd{ float:left;}
+		dd .text{ width:176px; height:25px; border:0; background:transparent; line-height:25px; font-size:14px; border-right:1px solid #dddedc; text-indent:8px;}
+		dd .btn{ width:25px; height:25px; background:#ff970f url(../../images/show/search_bg.gif) no-repeat center; border:0; cursor: pointer;}
+			
+/*----导航----*/
+#nav{ height:37px; background:url(../../images/show/nav_bg.gif) no-repeat; margin-bottom:10px;}
+	#nav li{ width:128px; float:left; line-height:37px; text-align:center; background:url(../../images/show/nav_line.gif) no-repeat -2px 3px;}
+	#nav li a{ display:block; font-weight:bold; color:#fff; font-size:14px;}
+		#nav li a:hover{ background:url(../../images/show/onclick_bg.gif) repeat-x 0 3px;}
+	#nav li:first-child{ background:url(../../images/show/home_bg.gif) no-repeat 35px 11px; text-indent:8px;}
+		#nav li:first-child a:hover{ background:url(../../images/show/home_onclick_bg..gif) no-repeat 1px 3px;}
+		
+/*----焦点图----*/
+#container { width:720px; height:285px; overflow:hidden; position:relative; float:left}
+	#list { width:4320px; height:285px; position: absolute; z-index:1;}
+		#list img { float:left; width:720px; height:285px;}
+		#list a{ position:relative; display:block; float:left; font-size:14px;}
+		#list a:hover span{ text-decoration:underline;}
+		#list span{ position:absolute; bottom:0; left:0; float:left; width:720px; height:36px; color:#FFF; font-weight:bold; background-color:RGBA(0,0,0,.4); text-indent:20px; line-height:36px;} 
+	#buttons { position: absolute; height: 18px; width: 128px; z-index: 3; bottom: 9px; left:600px;}
+		#buttons span { cursor: pointer; float: left; width: 18px; height: 18px; border-radius: 50%; background: #fff; margin-right:8px; color:#747474; text-align:center; line-height:18px; font-size:12px;}
+		#buttons .on {  background:#ff970f; color:#fff;}
+	.arrow { cursor: pointer; display: none; line-height: 39px; text-align: center; font-size: 36px; font-weight: bold; width: 40px; height: 40px;  position: absolute; z-index: 2; top: 45%; background-color: RGBA(0,0,0,.3); color: #fff;}
+	.arrow:hover { background-color: RGBA(0,0,0,.7);}
+	#container:hover .arrow { display: block;}
+	#prev { left: 20px;}
+	#next { right: 20px;}
+	
+/*----新闻动态----*/
+#news{ width:293px; height:283px; overflow:hidden; float:right;}
+	#news .con{ padding:20px 10px;}
+	.myscroll { height: 216px; line-height: 26px; overflow: hidden; position:relative;}
+		.myscroll a {width:210px;}
+		
+/*----中间图片----*/
+p.pic{ margin:10px 0;}
+
+/*----Left----*/
+.left{ border:1px solid #7dc01a; width:235px; float:left;}
+	.left_title{ height:28px; background:url(../../images/show/left_title_bg.gif) no-repeat 10px 6px #7dc01a; color:#fff; font-size:14px; line-height:28px; font-weight:bold; text-indent:32px;}
+	#morals .con, #res .con, #select .con{ padding:15px 10px 0; line-height:24px;}
+		#morals li, #res li, #select li{ border-bottom:1px solid #e5e5e5; margin-bottom:10px; text-indent:44px; background:url(../../images/show/icon_02.jpg) no-repeat 172px 8px;}
+			#morals li a, #res li a, #select li a{ display:block;}
+			#morals li a:hover, #res li a:hover, #select li a:hover { text-decoration:none;} 	
+
+/*----Right----*/
+.right{ width:780px; float:right;}
+
+/*----信息素质----*/
+#quality{ width:385px; float:left;}
+	#quality .con a{ width:288px; }
+
+/*----信息获取&甄别（Tab）----*/
+.tab{width:385px;  float:right; position:relative;}
+	.tab ul.menu{height:27px;}
+		.tab ul.menu li{float:left; width:122px; height:27px; line-height:27px; cursor:pointer; font-size:14px; text-indent:38px;}
+		.tab ul.menu li.active{ background:url(../../images/show/title_bg.gif) no-repeat; color:#fff; font-weight:bold;}
+		.tab a.more{ position:absolute; top:0; right:0;}
+	.con2{display:none;}
+	.con1 a,con2 a{ width:300px;}
+
+/*----科普活动报道----*/
+#activity{ margin-top:10px; height:207px; *height:196px;}
+	#activity .title{ width:150px; background:url(../../images/show/activity_title_bg.gif) no-repeat;}
+	#activity .photo{ width:740px; height:160px; *height:150px; overflow:hidden; margin:12px 15px 0;}
+		#activity .photo table{ border:none;}
+		#activity .photo img{ width:160px; height:108px; float:left; margin:8px; border:1px #666 solid;}
+		#activity .photo span{ color:#333; display:block; width:160px;  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:center; clear:both; padding:0 8px;}
+		#activity .photo a:hover span{ color:#ff970f; text-decoration:underline;}
+		
+/*----Footer----*/
+#footer{ height:70px; margin-top:30px; text-align:center; line-height:22px;  padding-top:6px; border-top:2px solid #63aa04;}
+	
+	
+/***************************************内页***********************************************/
+.showlocal{ line-height:26px; text-indent:4px;}
+	.showlocal a:hover{ color: #ff970f;}
+hr{ height:2px; background:#7dc01a; color:#7dc01a; border:0;}
+
+/*----页码----*/	
+.page{margin-bottom:10px; line-height:18px; text-align:center;}
+	.page a{margin:0 2px;display:inline-block; padding:0 6px; border:1px solid #CCC;}
+	.page a:hover{background:#7dc01a;}
+	.page a.on{background:#7dc01a; border-color:#7dc01a; color:#FFF;}
+	.page a.page_turn:hover{background:#7dc01a; border-color:#7dc01a; color:#FFF; box-shadow:1px 1px 3px #CCC;}
+	.page input{width:30px; height:18px; line-height:18px; margin-right:8px; padding-left:5px; border:1px solid #CCC;vertical-align:top;}
+	.page input:hover{border-color:#7dc01a;}
+
+
+/*----List----*/
+.container{ border:1px solid #7dc01a; padding:10px; width:760px; float:right;}
+	.container .con{ margin-bottom:30px;}
+		.container .con li{ background:url(../../images/show/icon_03.gif) no-repeat 0; border-bottom:1px #999 dashed; line-height:30px; height:30px;}
+		.container .con a{ width:650px;}
+		
+/*----Article----*/
+#article{ padding:10px;}
+	.essay_title{ font-size:14px; font-weight:bold; width:1025px; text-align:center; padding-bottom:10px;}
+	.info{ width:1025px; text-align:center; border-bottom:1px solid #ddd; padding-bottom:8px;}
+		.info span{ padding-left:10px;}
+	.essay{ padding-top:20px;}
+		.essay p{ text-indent:2em; line-height:20px; padding-bottom:6px; font-size:13px;}
+		
+/*----图片列表----*/
+#pic_con{ padding:10px 10px 30px;}
+	.showpic ul{ padding-top:10px; width:952px; margin:0 auto; font-size:0;}
+		.showpic li{ display:inline-block; vertical-align:middle; padding:8px 8px; *float:left;}
+		.showpic li img{ border:1px solid #CCCCCC; padding:2px; width:216px; height:145px;}
+		.showpic li span{ display:block; padding-top:4px; width:216px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12px;}
+		.showpic li a:hover{ color:#ff970f; text-decoration:underline;}
+		.showpic li img:hover{ border-color:#ff970f;}
+		
+#select1{ color:#ff970f;}
+.ctn{ display:none;}
+
+
