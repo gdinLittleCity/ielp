@@ -25,3 +25,8 @@ hs_err_pid*
 /.settings
 /.classpath
 /.project
+
+mvnw
+mvnw.cmd
+.mvn
+.idea
