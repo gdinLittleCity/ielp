@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.gdin.ilep.manager.dao.NewsDao">
+
+	
+	
+	<resultMap id="simpleMap" type="cn.edu.gdin.ilep.manager.domain.News" >
+		<id column="nid" property="nid"/>
+		<result column="title" property="title"/>
+		<result column="publish_time" property="publish_time"/>
+		<result column="image_b" property="image_b"/>
+		<result column="image_s" property="image_s"/>
+		<result column="content" property="contentString" typeHandler="cn.edu.gdin.ilep.util.MyHandler"/>
+		<association property="category" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="cid" property="cid"/>
+		</association>
+		<association property="user" javaType="cn.edu.gdin.ilep.manager.domain.Administor">
+			<id column="aid" property="aid"/>
+		</association>
+	</resultMap>
+	
+	<resultMap id="baseMap" type="cn.edu.gdin.ilep.manager.domain.News">
+		<id column="nid" property="nid"/>
+		<result column="title" property="title"/>
+		<result column="publish_time" property="publish_time"/>
+		<result column="image_b" property="image_b"/>
+		<association property="category" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="cid" property="cid"/>
+			<result column="cname" property="cname"/>
+		</association>
+		<association property="user" javaType="cn.edu.gdin.ilep.manager.domain.Administor">
+			<id column="aid" property="aid"/>
+		</association>
+	</resultMap>
+	
+	<resultMap id="showMap" type="cn.edu.gdin.ilep.manager.domain.News">
+		<id column="nid" property="nid"/>
+		<result column="title" property="title"/>
+		<result column="publish_time" property="publish_time"/>
+		<result column="image_b" property="image_b"/>
+		<result column="image_s" property="image_s"/>
+		<result column="content" property="contentString" typeHandler="cn.edu.gdin.ilep.util.MyHandler"/>
+		<association property="category" javaType="cn.edu.gdin.ilep.manager.domain.Category">
+			<id column="cid" property="cid"/>
+		</association>
+		<association property="user" javaType="cn.edu.gdin.ilep.manager.domain.Administor">
+			<id column="aid" property="aid"/>
+			<result column="name" property="name"/>
+		</association>
+	</resultMap>
+	
+	
+	<insert id="insert" parameterType="cn.edu.gdin.ilep.manager.domain.News">
+	 
+		<!--<selectKey keyColumn="nid" keyProperty="nid" resultType="String" order="BEFORE">
+			select  replace(uuid(),'-','')   from dual
+		</selectKey>-->
+		insert into news(nid,title,content,image_b,image_s,publish_time,cid,aid)
+		values(#{nid},
+		#{title},#{content,jdbcType=BLOB},
+		#{image_b},#{image_s},#{publish_time},
+		#{category.cid},#{user.aid}
+		)
+	
+	</insert>
+	
+	<select id="selectAll" parameterType="cn.edu.gdin.ilep.manager.domain.News" resultMap="simpleMap">
+		select * from news
+	
+	</select>
+	
+	<select id="selectById" parameterType="string" resultMap="showMap">
+		select n.*,u.name from news n,administor u where nid=#{nid} and n.aid=u.aid
+	
+	</select>
+	
+	<select id="selectAllNews" parameterType="cn.edu.gdin.ilep.page.PageBean" resultMap="baseMap">
+			select n.nid,n.title,n.publish_time,n.cid,c.cname 
+			from news n,category c 
+			where n.cid=c.cid 
+			LIMIT #{total},#{pageSize};
+	</select>
+	
+	<select id="selectCount" resultType="int">
+		select count(*) from news
+	</select>
+	
+	
+	<update id="updateNews" parameterType="cn.edu.gdin.ilep.manager.domain.News">
+		update news set 
+		title=#{title},publish_time=#{publish_time},cid=#{category.cid},
+		content=#{content,jdbcType=BLOB},aid=#{user.aid}
+		where nid=#{nid}
+	
+	</update>
+	
+	
+	<delete id="deleteNews" parameterType="string">
+		delete from news where nid=#{nid}
+	</delete>
+	
+	<!-- 前台DAO -->
+	
+	<select id="selectByCname" parameterType="string" resultMap="baseMap">
+		select n.nid,n.title,n.publish_time,n.image_b
+			from news n 
+			where 
+			n.cid in (select cid from category where cname=#{showCategory})
+			order by n.publish_time 
+			LIMIT 0,6; 
+	
+	</select>
+	
+	<select id="selectListByCname" parameterType="cn.edu.gdin.ilep.page.ShowPageBean" resultMap="baseMap">
+		select n.nid,n.title,n.publish_time,n.image_b
+			from news n 
+			where 
+			n.cid in (select cid from category where cname=#{cname})
+			order by n.publish_time 
+			LIMIT #{total},#{pageSize}
+	</select>
+	
+	<select id="selectCountByCname" parameterType="string" resultType="int">
+		select count(*) from news n 
+		where n.cid in (select cid from category where cname=#{showCategory})
+	
+	</select>
+	
+	
+</mapper>
